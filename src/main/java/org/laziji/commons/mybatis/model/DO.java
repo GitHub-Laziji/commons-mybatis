@@ -2,11 +2,7 @@ package org.laziji.commons.mybatis.model;
 
 import java.util.Date;
 
-public interface DO {
-
-    Long getId();
-
-    void setId(Long id);
+public interface DO extends POJO {
 
     Date getGmtCreate();
 

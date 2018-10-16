@@ -1,37 +1,27 @@
 package org.laziji.commons.mybatis.service;
 
-
-import org.laziji.commons.mybatis.model.DO;
+import org.laziji.commons.mybatis.model.POJO;
 import org.laziji.commons.mybatis.query.Query;
 
 import java.util.List;
 
-public interface Service<D extends DO> {
+public interface Service<T extends POJO> {
 
-    D selectById(Long id);
+    T selectById(Long id);
 
-    List<D> select(D bean);
+    List<T> select(T bean);
 
-    int selectCount(D bean);
+    int selectCount(T bean);
 
-    List<D> selectByQuery(Query<D> query);
+    List<T> selectAll();
 
-    int selectCountByQuery(Query<D> query);
+    T selectOne(T bean);
 
-    List<D> selectAll();
+    List<T> selectByQuery(Query<T> query);
 
-    D selectOne(D bean);
+    int selectCountByQuery(Query<T> query);
 
-    D selectOneByQuery(Query<D> query);
+    T selectOneByQuery(Query<T> query);
 
-    Page<D> selectPageByQuery(Query<D> query);
-
-
-    int insert(D bean);
-
-    int update(D bean);
-
-    int delete(Long id);
-
-
+    Page<T> selectPageByQuery(Query<T> query);
 }
