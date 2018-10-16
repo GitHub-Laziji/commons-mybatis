@@ -1,5 +1,7 @@
 package org.laziji.commons.mybatis.controller;
 
+import com.alibaba.fastjson.JSON;
+
 public class ResponseData {
 
     public static final Status SUCCESS = Status.SUCCESS;
@@ -93,5 +95,10 @@ public class ResponseData {
         public int getCode() {
             return code;
         }
+    }
+
+    @Override
+    public String toString(){
+        return JSON.toJSONString(this);
     }
 }

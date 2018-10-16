@@ -1,5 +1,6 @@
 package org.laziji.commons.mybatis.service;
 
+import com.alibaba.fastjson.JSON;
 import org.laziji.commons.mybatis.model.DO;
 
 import java.util.List;
@@ -32,5 +33,10 @@ public class Page<D extends DO> {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    @Override
+    public String toString(){
+        return JSON.toJSONString(this);
     }
 }
