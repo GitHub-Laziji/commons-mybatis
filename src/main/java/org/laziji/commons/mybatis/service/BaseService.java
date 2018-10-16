@@ -2,12 +2,13 @@ package org.laziji.commons.mybatis.service;
 
 
 import org.laziji.commons.mybatis.dao.Dao;
+import org.laziji.commons.mybatis.model.DO;
 import org.laziji.commons.mybatis.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public abstract class BaseService<D> implements Service<D> {
+public abstract class BaseService<D extends DO> implements Service<D> {
 
     @Autowired
     private Dao<D> mapper;

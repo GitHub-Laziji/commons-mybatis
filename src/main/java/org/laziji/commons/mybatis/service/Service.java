@@ -1,11 +1,12 @@
 package org.laziji.commons.mybatis.service;
 
 
+import org.laziji.commons.mybatis.model.DO;
 import org.laziji.commons.mybatis.query.Query;
 
 import java.util.List;
 
-public interface Service<D> {
+public interface Service<D extends DO> {
 
     D selectById(Long id);
 

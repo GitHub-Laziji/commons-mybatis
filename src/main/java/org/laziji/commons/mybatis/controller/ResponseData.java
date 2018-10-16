@@ -6,6 +6,14 @@ public class ResponseData {
     public static final Status ERROR = Status.ERROR;
     public static final Status ERROR_NOT_LOGGED = Status.ERROR_NOT_LOGGED;
 
+    public static final ResponseData SUCCESS_RESPONSE = successResponse();
+    public static final ResponseData ERROR_RESPONSE = errorResponse();
+    public static final ResponseData UPDATE_ERROR_RESPONSE = errorResponse("更新失败");
+    public static final ResponseData INSERT_ERROR_RESPONSE = errorResponse("插入失败");
+    public static final ResponseData PARAMS_ERROR_RESPONSE = errorResponse("参数错误");
+    public static final ResponseData PASSWORD_ERROR_RESPONSE = errorResponse("用户名或密码错误");
+    public static final ResponseData CAPTCHA_ERROR_RESPONSE = errorResponse("验证码错误");
+
     private boolean success;
     private Status status;
     private String message;
@@ -13,33 +21,40 @@ public class ResponseData {
 
 
     public static ResponseData successResponse(Object data) {
-        ResponseData requestJson = successResponse();
-        requestJson.setData(data);
-        return requestJson;
-    }
-
-    public static ResponseData successResponse() {
-        ResponseData requestJson = new ResponseData();
-        requestJson.setSuccess(true);
-        requestJson.setStatus(SUCCESS);
-        return requestJson;
+        ResponseData response = successResponse();
+        response.data = data;
+        return response;
     }
 
     public static ResponseData errorResponse(String message) {
-        ResponseData requestJson = errorResponse();
-        requestJson.setMessage(message);
-        return requestJson;
+        ResponseData response = errorResponse();
+        response.message = message;
+        return response;
     }
 
-    public static ResponseData errorResponse() {
-        ResponseData requestJson = new ResponseData();
-        requestJson.setSuccess(false);
-        requestJson.setStatus(ERROR);
-        return requestJson;
+    public static ResponseData errorResponse(Status status,String message) {
+        ResponseData response = new ResponseData();
+        response.success = false;
+        response.status = status;
+        response.message = message;
+        return response;
     }
 
-    public ResponseData() {
+    private static ResponseData successResponse() {
+        ResponseData response = new ResponseData();
+        response.success = true;
+        response.status = SUCCESS;
+        return response;
     }
+
+    private static ResponseData errorResponse() {
+        ResponseData response = new ResponseData();
+        response.success = false;
+        response.status = ERROR;
+        return response;
+    }
+
+    private ResponseData() {}
 
     public Integer getCode() {
         if(status==null){
@@ -47,36 +62,21 @@ public class ResponseData {
         }
         return status.getCode();
     }
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 
     public boolean isSuccess() {
         return success;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public Status getStatus() {
+        return status;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public Object getData() {
         return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
     }
 
     public enum Status {

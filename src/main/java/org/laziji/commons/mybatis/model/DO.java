@@ -1,10 +1,8 @@
-package org.laziji.commons.mybatis.query;
-
-import org.laziji.commons.mybatis.model.DO;
+package org.laziji.commons.mybatis.model;
 
 import java.util.Date;
 
-public interface Query<D extends DO> {
+public interface DO {
 
     Long getId();
 
@@ -17,6 +15,4 @@ public interface Query<D extends DO> {
     Date getGmtModified();
 
     void setGmtModified(Date gmtModified);
-
-    D toBean();
 }

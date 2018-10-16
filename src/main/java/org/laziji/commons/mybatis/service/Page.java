@@ -1,8 +1,10 @@
 package org.laziji.commons.mybatis.service;
 
+import org.laziji.commons.mybatis.model.DO;
+
 import java.util.List;
 
-public class Page<D> {
+public class Page<D extends DO> {
 
     private List<D> list;
     private Integer total;

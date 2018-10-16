@@ -1,16 +1,21 @@
 package org.laziji.commons.mybatis.query;
 
 import com.alibaba.fastjson.JSON;
+import org.laziji.commons.mybatis.model.DO;
 
-public abstract class BaseQuery<D> implements Query<D> {
+import java.util.Date;
+
+public abstract class BaseQuery<D extends DO> implements Query<D> {
 
     private Integer limit = 1;
     private Integer page = 0;
     private Integer offset = 0;
-
     private String sort;
     private String order;
 
+    private Long id;
+    private Date gmtCreate;
+    private Date gmtModified;
 
     public Integer getLimit() {
         return limit;
@@ -52,6 +57,36 @@ public abstract class BaseQuery<D> implements Query<D> {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    @Override
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    @Override
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    @Override
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     @Override

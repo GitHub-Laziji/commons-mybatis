@@ -1,11 +1,12 @@
 package org.laziji.commons.mybatis.dao;
 
 
+import org.laziji.commons.mybatis.model.DO;
 import org.laziji.commons.mybatis.query.Query;
 
 import java.util.List;
 
-public interface Dao<D> {
+public interface Dao<D extends DO> {
 
     D selectById(Long id);
 
