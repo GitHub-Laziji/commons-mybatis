@@ -9,17 +9,21 @@ public interface Service<T extends POJO> {
 
     List<T> select(T bean);
 
+    List<T> select(Query<T> query);
+
     int selectCount(T bean);
+
+    int selectCount(Query<T> query);
 
     List<T> selectAll();
 
     T selectOne(T bean);
 
-    List<T> selectByQuery(Query<T> query);
+    T selectOne(Query<T> query);
 
-    int selectCountByQuery(Query<T> query);
+    T selectFirstOne(T bean);
 
-    T selectOneByQuery(Query<T> query);
+    T selectFirstOne(Query<T> query);
 
-    Page<T> selectPageByQuery(Query<T> query);
+    Page<T> selectPage(Query<T> query);
 }

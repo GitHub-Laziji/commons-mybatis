@@ -15,6 +15,6 @@ public abstract class BaseController<D extends POJO, Q extends Query<D>> impleme
     @Override
     @RequestMapping(LIST)
     public ResponseData list(@RequestBody Q query) {
-        return ResponseData.successResponse(service.selectPageByQuery(query));
+        return ResponseData.successResponse(service.selectPage(query));
     }
 }

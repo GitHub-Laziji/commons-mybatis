@@ -19,13 +19,23 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
     }
 
     @Override
+    public List<T> select(Query<T> query) {
+        return mapper.select(query);
+    }
+
+    @Override
     public int selectCount(T bean) {
         return mapper.selectCount(bean);
     }
 
     @Override
+    public int selectCount(Query<T> query) {
+        return mapper.selectCount(query);
+    }
+
+    @Override
     public List<T> selectAll() {
-        return select(null);
+        return select((T)null);
     }
 
     @Override
@@ -38,26 +48,34 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
     }
 
     @Override
-    public List<T> selectByQuery(Query<T> query) {
-        return mapper.select(query);
-    }
-
-    @Override
-    public int selectCountByQuery(Query<T> query) {
-        return mapper.selectCount(query);
-    }
-
-    @Override
-    public T selectOneByQuery(Query<T> query) {
-        if (selectCountByQuery(query) != 1) {
+    public T selectOne(Query<T> query) {
+        if (selectCount(query) != 1) {
             return null;
         }
-        List<T> list = selectByQuery(query);
+        List<T> list = select(query);
         return list.get(0);
     }
 
     @Override
-    public Page<T> selectPageByQuery(Query<T> query) {
+    public T selectFirstOne(Query<T> query) {
+        List<T> list = select(query);
+        if(list==null||list.size()==0){
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public T selectFirstOne(T bean) {
+        List<T> list = select(bean);
+        if(list==null||list.size()==0){
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public Page<T> selectPage(Query<T> query) {
         Page<T> page = new Page<>();
         int count = mapper.selectCount(query);
         page.setTotal(count);
