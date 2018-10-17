@@ -4,8 +4,19 @@ import java.util.Date;
 
 public abstract class BaseDO extends BasePOJO implements DO {
 
+    private Long id;
     private Date gmtCreate;
     private Date gmtModified;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     @Override
     public Date getGmtCreate() {

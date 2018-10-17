@@ -4,6 +4,10 @@ import java.util.Date;
 
 public interface DO extends POJO {
 
+    Long getId();
+
+    void setId(Long id);
+
     Date getGmtCreate();
 
     void setGmtCreate(Date gmtCreate);

@@ -14,11 +14,6 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
     private Dao<T> mapper;
 
     @Override
-    public T selectById(Long id) {
-        return mapper.selectById(id);
-    }
-
-    @Override
     public List<T> select(T bean) {
         return mapper.select(bean);
     }

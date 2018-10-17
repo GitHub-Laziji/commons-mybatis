@@ -11,8 +11,6 @@ public abstract class BaseQuery<T extends POJO> implements Query<T> {
     private String sort;
     private String order;
 
-    private Long id;
-
     public Integer getLimit() {
         return limit;
     }
@@ -53,16 +51,6 @@ public abstract class BaseQuery<T extends POJO> implements Query<T> {
 
     public void setOrder(String order) {
         this.order = order;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
     }
 
     @Override
