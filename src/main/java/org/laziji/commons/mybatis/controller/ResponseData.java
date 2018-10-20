@@ -16,6 +16,7 @@ public class ResponseData {
     public static final ResponseData PARAMS_ERROR_RESPONSE = errorResponse("参数错误");
     public static final ResponseData PASSWORD_ERROR_RESPONSE = errorResponse("用户名或密码错误");
     public static final ResponseData CAPTCHA_ERROR_RESPONSE = errorResponse("验证码错误");
+    public static final ResponseData NOT_LOGGED_ERROR_RESPONSE = errorResponse(ERROR_NOT_LOGGED);
 
     private boolean success;
     private Status status;
@@ -32,6 +33,13 @@ public class ResponseData {
     public static ResponseData errorResponse(String message) {
         ResponseData response = errorResponse();
         response.message = message;
+        return response;
+    }
+
+    public static ResponseData errorResponse(Status status) {
+        ResponseData response = new ResponseData();
+        response.success = false;
+        response.status = status;
         return response;
     }
 
