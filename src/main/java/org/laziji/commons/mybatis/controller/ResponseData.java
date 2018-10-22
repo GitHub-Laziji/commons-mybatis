@@ -6,7 +6,9 @@ public class ResponseData {
 
     public static final Status SUCCESS = Status.SUCCESS;
     public static final Status ERROR = Status.ERROR;
-    public static final Status ERROR_NOT_LOGGED = Status.ERROR_NOT_LOGGED;
+    public static final Status NOT_LOGGED_ERROR = Status.NOT_LOGGED_ERROR;
+    public static final Status PERMISSION_DENIED_ERROR = Status.PERMISSION_DENIED_ERROR;
+    public static final Status SERVER_ERROR = Status.SERVER_ERROR;
 
     public static final ResponseData SUCCESS_RESPONSE = successResponse();
     public static final ResponseData ERROR_RESPONSE = errorResponse();
@@ -16,7 +18,9 @@ public class ResponseData {
     public static final ResponseData PARAMS_ERROR_RESPONSE = errorResponse("参数错误");
     public static final ResponseData PASSWORD_ERROR_RESPONSE = errorResponse("用户名或密码错误");
     public static final ResponseData CAPTCHA_ERROR_RESPONSE = errorResponse("验证码错误");
-    public static final ResponseData NOT_LOGGED_ERROR_RESPONSE = errorResponse(ERROR_NOT_LOGGED);
+    public static final ResponseData NOT_LOGGED_ERROR_RESPONSE = errorResponse(NOT_LOGGED_ERROR);
+    public static final ResponseData PERMISSION_DENIED_ERROR_RESPONSE = errorResponse(PERMISSION_DENIED_ERROR);
+    public static final ResponseData SERVER_ERROR_RESPONSE = errorResponse(SERVER_ERROR);
 
     private boolean success;
     private Status status;
@@ -93,8 +97,9 @@ public class ResponseData {
     public enum Status {
         SUCCESS(200),
         ERROR(500),
-        ERROR_NOT_LOGGED(501);
-
+        NOT_LOGGED_ERROR(501),
+        PERMISSION_DENIED_ERROR(502),
+        SERVER_ERROR(503);
         private int code;
 
         Status(int code) {
