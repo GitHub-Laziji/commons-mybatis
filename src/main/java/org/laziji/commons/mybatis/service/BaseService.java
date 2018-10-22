@@ -24,6 +24,11 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
     }
 
     @Override
+    public List<T> selectAll() {
+        return select((T)null);
+    }
+
+    @Override
     public int selectCount(T bean) {
         return mapper.selectCount(bean);
     }
@@ -34,8 +39,8 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
     }
 
     @Override
-    public List<T> selectAll() {
-        return select((T)null);
+    public int selectTotal() {
+        return mapper.selectCount((T)null);
     }
 
     @Override

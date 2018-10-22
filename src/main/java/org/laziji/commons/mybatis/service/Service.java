@@ -11,11 +11,13 @@ public interface Service<T extends POJO> {
 
     List<T> select(Query<T> query);
 
+    List<T> selectAll();
+
     int selectCount(T bean);
 
     int selectCount(Query<T> query);
 
-    List<T> selectAll();
+    int selectTotal();
 
     T selectOne(T bean);
 
