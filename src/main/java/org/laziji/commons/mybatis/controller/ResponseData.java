@@ -2,6 +2,10 @@ package org.laziji.commons.mybatis.controller;
 
 import com.alibaba.fastjson.JSON;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
+
 public class ResponseData {
 
     public static final Status SUCCESS = Status.SUCCESS;
@@ -70,6 +74,15 @@ public class ResponseData {
     }
 
     private ResponseData() {}
+
+    public void writeAndClose(PrintWriter writer) {
+        write(writer);
+        writer.close();
+    }
+
+    public void write(PrintWriter writer) {
+        writer.print(this.toString());
+    }
 
     public Integer getCode() {
         if(status==null){
