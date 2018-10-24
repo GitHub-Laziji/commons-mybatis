@@ -14,23 +14,13 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
     private Dao<T> mapper;
 
     @Override
-    public List<T> select(T bean) {
-        return mapper.select(bean);
-    }
-
-    @Override
     public List<T> select(Query<T> query) {
         return mapper.select(query);
     }
 
     @Override
     public List<T> selectAll() {
-        return select((T)null);
-    }
-
-    @Override
-    public int selectCount(T bean) {
-        return mapper.selectCount(bean);
+        return select(null);
     }
 
     @Override
@@ -40,16 +30,7 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
 
     @Override
     public int selectTotal() {
-        return mapper.selectCount((T)null);
-    }
-
-    @Override
-    public T selectOne(T bean) {
-        if (selectCount(bean) != 1) {
-            return null;
-        }
-        List<T> list = select(bean);
-        return list.get(0);
+        return mapper.selectCount(null);
     }
 
     @Override
@@ -64,15 +45,6 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
     @Override
     public T selectFirstOne(Query<T> query) {
         List<T> list = select(query);
-        if(list==null||list.size()==0){
-            return null;
-        }
-        return list.get(0);
-    }
-
-    @Override
-    public T selectFirstOne(T bean) {
-        List<T> list = select(bean);
         if(list==null||list.size()==0){
             return null;
         }

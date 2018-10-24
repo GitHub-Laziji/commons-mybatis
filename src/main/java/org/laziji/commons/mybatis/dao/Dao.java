@@ -7,10 +7,6 @@ import java.util.List;
 
 public interface Dao<T extends POJO> {
 
-    List<T> select(T bean);
-
-    int selectCount(T bean);
-
     List<T> select(Query<T> query);
 
     int selectCount(Query<T> query);
