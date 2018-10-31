@@ -2,9 +2,7 @@ package org.laziji.commons.mybatis.controller;
 
 import com.alibaba.fastjson.JSON;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 
 public class ResponseData {
 
