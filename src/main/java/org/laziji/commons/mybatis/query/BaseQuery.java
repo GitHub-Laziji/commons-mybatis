@@ -24,7 +24,10 @@ public abstract class BaseQuery<T extends POJO> implements Query<T> {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Integer page) {
+        if (page == null) {
+            page = 0;
+        }
         this.page = page >= 0 ? page : 0;
         this.offset = this.page * this.limit;
     }
