@@ -17,19 +17,43 @@ public abstract class BaseDOController<T extends DO, Q extends Query<T>> extends
     @Override
     @RequestMapping(SAVE)
     public ResponseData save(@RequestBody T bean) {
+        beforeSave(bean);
         if (service.insert(bean) != 1) {
             return ResponseData.INSERT_ERROR_RESPONSE;
         }
+        afterSave(bean);
         return ResponseData.SUCCESS_RESPONSE;
     }
 
     @Override
     @RequestMapping(UPDATE)
     public ResponseData update(@RequestBody T bean) {
+        beforeUpdate(bean);
         bean.setGmtModified(new Date());
         if (service.update(bean) != 1) {
             return ResponseData.UPDATE_ERROR_RESPONSE;
         }
+        afterUpdate(bean);
         return ResponseData.SUCCESS_RESPONSE;
+    }
+
+    @Override
+    public void beforeSave(T bean){
+
+    }
+
+    @Override
+    public void afterSave(T bean){
+
+    }
+
+    @Override
+    public void beforeUpdate(T bean){
+
+    }
+
+    @Override
+    public void afterUpdate(T bean){
+
     }
 }

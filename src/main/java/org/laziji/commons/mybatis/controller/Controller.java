@@ -11,4 +11,8 @@ public interface Controller<T extends POJO, Q extends Query<T>> {
     String REMOVE = "remove";
 
     ResponseData list(Q query);
+
+    void beforeList(Q query);
+
+    void afterList(Q query);
 }
