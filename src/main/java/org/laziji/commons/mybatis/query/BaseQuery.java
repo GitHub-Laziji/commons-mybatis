@@ -44,7 +44,11 @@ public abstract class BaseQuery<T extends POJO> implements Query<T> {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(Column sort) {
+        this.sort = sort==null?null:sort.toString();
+    }
+
+    public void setSortValue(String sort) {
         this.sort = sort;
     }
 
@@ -52,8 +56,8 @@ public abstract class BaseQuery<T extends POJO> implements Query<T> {
         return order;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
+    public void setOrder(Order order) {
+        this.order = order==null?null:order.toString();
     }
 
     @Override
