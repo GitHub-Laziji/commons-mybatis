@@ -25,9 +25,9 @@ public class SqlProvider {
                 .append(getTableName(entityClass))
                 .append(getQueryWhere(query, entityClass));
 
-        JSONObject queryObj = JSON.parseObject(JSON.toJSONString(query));
+        JSONObject queryObj = parseObject(query);
         if (queryObj.get("sort") != null) {
-            sql.append(" order by `").append(queryObj.getString("sort")).append("` ");
+            sql.append(" order by ").append(queryObj.getString("sort")).append(" ");
             if (queryObj.get("order") != null) {
                 sql.append(queryObj.getString("order"));
             }
@@ -123,23 +123,23 @@ public class SqlProvider {
     private String getQueryWhere(Query query, Class clazz) {
 
         StringBuilder wheres = new StringBuilder();
-        JSONObject queryObj = JSON.parseObject(JSON.toJSONString(query));
+        JSONObject queryObj = parseObject(query);
         for (Method method : clazz.getMethods()) {
             String name = method.getName();
             if (name.length() > 3 && name.startsWith("set")
                     && name.charAt(3) >= 'A' && name.charAt(3) <= 'Z') {
                 String fieldName = (char) (name.charAt(3) - 'A' + 'a') + name.substring(4);
                 if (queryObj.get(fieldName) != null) {
-                    wheres.append("and `")
+                    wheres.append(" and `")
                             .append(conversionName(fieldName))
                             .append("` = #{").append(fieldName).append("}");
                 }
 
                 if (method.getReturnType().equals(String.class) && queryObj.get(fieldName + "Like") != null) {
-                    wheres.append("and `")
+                    wheres.append(" and `")
                             .append(conversionName(fieldName))
                             .append("` like CONCAT('%',#{")
-                            .append(fieldName).append("}, '%')");
+                            .append(fieldName).append("}, '%') ");
                 }
             }
         }
@@ -151,7 +151,7 @@ public class SqlProvider {
     }
 
     private <T extends POJO> String getBeanSet(T bean) {
-        JSONObject beanObj = JSON.parseObject(JSON.toJSONString(bean));
+        JSONObject beanObj = parseObject(bean);
         StringBuilder set = new StringBuilder();
         for (Map.Entry<String, Object> entry : beanObj.entrySet()) {
             set.append(",`").append(conversionName(entry.getKey()))
@@ -168,6 +168,13 @@ public class SqlProvider {
         return " `" + conversionName(clazz.getSimpleName()) + "` ";
     }
 
+
+    private JSONObject parseObject(Object o){
+        if(o==null){
+            return new JSONObject();
+        }
+        return JSON.parseObject(JSON.toJSONString(o));
+    }
 
     private String conversionName(String name) {
         char[] chars = name.toCharArray();
