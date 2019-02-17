@@ -55,7 +55,7 @@ public class SqlProvider {
         return new SQL()
                 .SELECT(getColumns(clazz))
                 .FROM(getTableName(clazz))
-                .WHERE("`id` = #{id}")
+                .WHERE("`id`=#{id}")
                 .toString();
     }
 
@@ -89,7 +89,7 @@ public class SqlProvider {
         assert clazz != null;
         return new SQL()
                 .DELETE_FROM(getTableName(clazz))
-                .WHERE("`id` = #{value}")
+                .WHERE("`id`=#{id}")
                 .toString();
     }
 
