@@ -10,20 +10,20 @@ import org.springframework.core.ResolvableType;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqlProvider {
 
-
     public <T extends POJO> String select(ProviderContext context, Query<T> query) {
-        Class<?> entityClass = getEntityClass(context);
-        assert entityClass != null;
+        Class clazz = getEntityClass(context);
+        assert clazz != null;
         StringBuilder sql = new StringBuilder();
-        sql.append("select ")
-                .append(getColumns(entityClass))
-                .append(" from")
-                .append(getTableName(entityClass))
-                .append(getQueryWhere(query, entityClass));
+        sql.append(new SQL()
+                .SELECT(getColumns(clazz))
+                .FROM(getTableName(clazz))
+                .WHERE(getWheres(query, clazz))
+                .toString());
 
         JSONObject queryObj = parseObject(query);
         if (queryObj.get("sort") != null) {
@@ -39,90 +39,91 @@ public class SqlProvider {
     }
 
     public <T extends POJO> String selectCount(ProviderContext context, Query<T> query) {
-        Class<?> entityClass = getEntityClass(context);
-        assert entityClass != null;
-        return "select count(*) from "
-                + getTableName(entityClass)
-                + getQueryWhere(query, entityClass);
+        Class clazz = getEntityClass(context);
+        assert clazz != null;
+        return new SQL()
+                .SELECT("count(*)")
+                .FROM(getTableName(clazz))
+                .WHERE(getWheres(query, clazz))
+                .toString();
     }
 
     public String selectById(ProviderContext context) {
-        Class<?> entityClass = getEntityClass(context);
-        assert entityClass != null;
+        Class clazz = getEntityClass(context);
+        assert clazz != null;
         return new SQL()
-                .SELECT(getColumns(entityClass))
-                .FROM(getTableName(entityClass))
+                .SELECT(getColumns(clazz))
+                .FROM(getTableName(clazz))
                 .WHERE("`id` = #{id}")
                 .toString();
     }
 
     public <T extends POJO> String insert(ProviderContext context, T bean) {
-        Class<?> entityClass = getEntityClass(context);
-        assert entityClass != null;
+        Class clazz = getEntityClass(context);
+        assert clazz != null;
         SQL sql = new SQL();
-        sql.INSERT_INTO(getTableName(entityClass));
+        sql.INSERT_INTO(getTableName(clazz));
         JSONObject beanObj = JSON.parseObject(JSON.toJSONString(bean));
-        for (Map.Entry<String, Object> entry : beanObj.entrySet()) {
-            sql.VALUES("`" + conversionName(entry.getKey()) + "`", "#{" + entry.getKey() + "}");
+        for (String key : beanObj.keySet()) {
+            sql.VALUES(String.format("`%s`", conversionName(key)), String.format("#{%s}", key));
         }
         return sql.toString();
     }
 
     public <T extends POJO> String update(ProviderContext context, T bean) {
-        Class<?> entityClass = getEntityClass(context);
-        assert entityClass != null;
-        return new SQL()
-                .UPDATE(getTableName(entityClass))
-                .SET(getBeanSet(bean))
-                .WHERE("`id` = #{id}")
-                .toString();
+        Class clazz = getEntityClass(context);
+        assert clazz != null;
+        JSONObject beanObj = parseObject(bean);
+        SQL sql = new SQL();
+        sql.UPDATE(getTableName(clazz));
+        for (String key : beanObj.keySet()) {
+            sql.SET(String.format("`%s`=#{%s}", conversionName(key), key));
+        }
+        sql.WHERE("`id`=#{id}");
+        return sql.toString();
     }
 
     public String delete(ProviderContext context) {
-        Class<?> entityClass = getEntityClass(context);
-        assert entityClass != null;
+        Class clazz = getEntityClass(context);
+        assert clazz != null;
         return new SQL()
-                .DELETE_FROM(getTableName(entityClass))
+                .DELETE_FROM(getTableName(clazz))
                 .WHERE("`id` = #{value}")
                 .toString();
     }
 
 
-    private Class<?> getEntityClass(ProviderContext context) {
-        Class<?> mapperType = context.getMapperType();
-
-        for (Type parent : mapperType.getGenericInterfaces()) {
-            ResolvableType parentType = ResolvableType.forType(parent);
-            if (parentType.getRawClass() == Dao.class
-                    || parentType.getRawClass() == DODao.class
-                    || parentType.getRawClass() == VODao.class) {
-
-                return parentType.getGeneric(0).getRawClass();
+    private Class getEntityClass(ProviderContext context) {
+        for (Type type : context.getMapperType().getGenericInterfaces()) {
+            ResolvableType resolvableType = ResolvableType.forType(type);
+            if (resolvableType.getRawClass() == Dao.class
+                    || resolvableType.getRawClass() == DODao.class
+                    || resolvableType.getRawClass() == VODao.class) {
+                return resolvableType.getGeneric(0).getRawClass();
             }
         }
         return null;
     }
 
-    private String getColumns(Class clazz) {
-        StringBuilder columns = new StringBuilder();
+    private String getTableName(Class clazz) {
+        return String.format("`%s`", conversionName(clazz.getSimpleName()));
+    }
+
+    private String[] getColumns(Class clazz) {
+        List<String> columns = new ArrayList<>();
         for (Method method : clazz.getMethods()) {
             String name = method.getName();
             if (name.length() > 3 && name.startsWith("set")
                     && name.charAt(3) >= 'A' && name.charAt(3) <= 'Z') {
                 String fieldName = (char) (name.charAt(3) - 'A' + 'a') + name.substring(4);
-                columns.append(",`").append(conversionName(fieldName)).append("` as `")
-                        .append(fieldName).append("`");
+                columns.add(String.format("`%s` as `%s`", conversionName(fieldName), fieldName));
             }
         }
-        if (columns.length() == 0) {
-            return " * ";
-        }
-        return " " + columns.substring(1) + " ";
+        return columns.toArray(new String[]{});
     }
 
-    private String getQueryWhere(Query query, Class clazz) {
-
-        StringBuilder wheres = new StringBuilder();
+    private String[] getWheres(Query query, Class clazz) {
+        List<String> wheres = new ArrayList<>();
         JSONObject queryObj = parseObject(query);
         for (Method method : clazz.getMethods()) {
             String name = method.getName();
@@ -130,47 +131,20 @@ public class SqlProvider {
                     && name.charAt(3) >= 'A' && name.charAt(3) <= 'Z') {
                 String fieldName = (char) (name.charAt(3) - 'A' + 'a') + name.substring(4);
                 if (queryObj.get(fieldName) != null) {
-                    wheres.append(" and `")
-                            .append(conversionName(fieldName))
-                            .append("` = #{").append(fieldName).append("}");
+                    wheres.add(String.format("`%s`=#{%s}", conversionName(fieldName), fieldName));
                 }
 
-                if (method.getReturnType().equals(String.class) && queryObj.get(fieldName + "Like") != null) {
-                    wheres.append(" and `")
-                            .append(conversionName(fieldName))
-                            .append("` like CONCAT('%',#{")
-                            .append(fieldName).append("}, '%') ");
+                if (method.getReturnType().equals(String.class)
+                        && queryObj.get(fieldName + "Like") != null) {
+                    wheres.add(String.format("`%s` like CONCAT('%%',#{%s}, '%%')", conversionName(fieldName), fieldName));
                 }
             }
         }
-
-        if (wheres.length() == 0) {
-            return " ";
-        }
-        return " where " + wheres.substring(4) + " ";
+        return wheres.toArray(new String[]{});
     }
 
-    private <T extends POJO> String getBeanSet(T bean) {
-        JSONObject beanObj = parseObject(bean);
-        StringBuilder set = new StringBuilder();
-        for (Map.Entry<String, Object> entry : beanObj.entrySet()) {
-            set.append(",`").append(conversionName(entry.getKey()))
-                    .append("`=#{").append(entry.getKey()).append("}");
-        }
-        if (set.length() == 0) {
-            return "";
-        }
-        return set.substring(1);
-    }
-
-
-    private String getTableName(Class clazz) {
-        return " `" + conversionName(clazz.getSimpleName()) + "` ";
-    }
-
-
-    private JSONObject parseObject(Object o){
-        if(o==null){
+    private JSONObject parseObject(Object o) {
+        if (o == null) {
             return new JSONObject();
         }
         return JSON.parseObject(JSON.toJSONString(o));
