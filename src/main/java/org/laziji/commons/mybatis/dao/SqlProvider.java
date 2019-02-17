@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 import org.apache.ibatis.jdbc.SQL;
+import org.laziji.commons.mybatis.dao.annotations.Table;
 import org.laziji.commons.mybatis.model.POJO;
 import org.laziji.commons.mybatis.query.Query;
 import org.springframework.core.ResolvableType;
@@ -106,6 +107,10 @@ public class SqlProvider {
     }
 
     private String getTableName(Class clazz) {
+        Table annotation = (Table) clazz.getAnnotation(Table.class);
+        if (annotation != null) {
+            return String.format("`%s`", conversionName(annotation.name()));
+        }
         return String.format("`%s`", conversionName(clazz.getSimpleName()));
     }
 
@@ -133,7 +138,6 @@ public class SqlProvider {
                 if (queryObj.get(fieldName) != null) {
                     wheres.add(String.format("`%s`=#{%s}", conversionName(fieldName), fieldName));
                 }
-
                 if (method.getReturnType().equals(String.class)
                         && queryObj.get(fieldName + "Like") != null) {
                     wheres.add(String.format("`%s` like CONCAT('%%',#{%s}, '%%')", conversionName(fieldName), fieldName));
