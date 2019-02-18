@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 import org.apache.ibatis.jdbc.SQL;
 import org.laziji.commons.mybatis.dao.annotations.Table;
-import org.laziji.commons.mybatis.model.POJO;
+import org.laziji.commons.mybatis.model.DO;
 import org.laziji.commons.mybatis.query.Query;
 import org.springframework.core.ResolvableType;
 
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class SqlProvider {
 
-    public <T extends POJO> String select(ProviderContext context, Query<T> query) {
+    public String select(ProviderContext context, Query query) {
         Class clazz = getEntityClass(context);
         assert clazz != null;
         StringBuilder sql = new StringBuilder();
@@ -39,7 +39,7 @@ public class SqlProvider {
         return sql.toString();
     }
 
-    public <T extends POJO> String selectCount(ProviderContext context, Query<T> query) {
+    public String selectCount(ProviderContext context, Query query) {
         Class clazz = getEntityClass(context);
         assert clazz != null;
         return new SQL()
@@ -59,7 +59,7 @@ public class SqlProvider {
                 .toString();
     }
 
-    public <T extends POJO> String insert(ProviderContext context, T bean) {
+    public String insert(ProviderContext context, DO bean) {
         Class clazz = getEntityClass(context);
         assert clazz != null;
         SQL sql = new SQL();
@@ -71,7 +71,7 @@ public class SqlProvider {
         return sql.toString();
     }
 
-    public <T extends POJO> String update(ProviderContext context, T bean) {
+    public String update(ProviderContext context, DO bean) {
         Class clazz = getEntityClass(context);
         assert clazz != null;
         JSONObject beanObj = parseObject(bean);

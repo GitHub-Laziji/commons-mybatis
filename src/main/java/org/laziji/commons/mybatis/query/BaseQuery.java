@@ -3,6 +3,8 @@ package org.laziji.commons.mybatis.query;
 import com.alibaba.fastjson.JSON;
 import org.laziji.commons.mybatis.model.POJO;
 
+import java.lang.reflect.ParameterizedType;
+
 public abstract class BaseQuery<T extends POJO> implements Query<T> {
 
     private Integer limit = 1;
@@ -70,6 +72,12 @@ public abstract class BaseQuery<T extends POJO> implements Query<T> {
             return;
         }
         this.order = order;
+    }
+
+    @Override
+    public T toBean() {
+        return JSON.parseObject(JSON.toJSONString(this),
+                ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
     }
 
     @Override
