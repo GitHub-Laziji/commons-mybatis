@@ -109,7 +109,7 @@ public class SqlProvider {
     private String getTableName(Class clazz) {
         Table annotation = (Table) clazz.getAnnotation(Table.class);
         if (annotation != null) {
-            return String.format("`%s`", conversionName(annotation.name()));
+            return String.format("`%s`", annotation.name());
         }
         return String.format("`%s`", conversionName(clazz.getSimpleName()));
     }
