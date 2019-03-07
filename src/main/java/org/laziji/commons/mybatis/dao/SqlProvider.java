@@ -132,7 +132,7 @@ public class SqlProvider {
         JSONObject queryObj = parseObject(query);
         for (Method method : clazz.getMethods()) {
             String name = method.getName();
-            if (name.length() > 3 && name.startsWith("set")
+            if (name.length() > 3 && name.startsWith("get")
                     && name.charAt(3) >= 'A' && name.charAt(3) <= 'Z') {
                 String fieldName = (char) (name.charAt(3) - 'A' + 'a') + name.substring(4);
                 if (queryObj.get(fieldName) != null) {
@@ -140,7 +140,7 @@ public class SqlProvider {
                 }
                 if (method.getReturnType().equals(String.class)
                         && queryObj.get(fieldName + "Like") != null) {
-                    wheres.add(String.format("`%s` like CONCAT('%%',#{%s}, '%%')", conversionName(fieldName), fieldName));
+                    wheres.add(String.format("`%s` like CONCAT('%%',#{%sLike}, '%%')", conversionName(fieldName), fieldName));
                 }
             }
         }
