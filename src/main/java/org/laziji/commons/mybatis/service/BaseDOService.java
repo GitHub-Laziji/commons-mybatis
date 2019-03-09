@@ -15,17 +15,17 @@ public abstract class BaseDOService<T extends DO> extends BaseService<T> impleme
     }
 
     @Override
-    public int insert(T bean) {
-        return mapper.insert(bean);
+    public boolean insert(T bean) {
+        return mapper.insert(bean) > 0;
     }
 
     @Override
-    public int update(T bean) {
-        return mapper.update(bean);
+    public boolean update(T bean) {
+        return mapper.update(bean) > 0;
     }
 
     @Override
-    public int delete(Long id) {
-        return mapper.delete(id);
+    public boolean delete(Long id) {
+        return mapper.delete(id) > 0;
     }
 }

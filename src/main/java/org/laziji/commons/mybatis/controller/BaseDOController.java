@@ -18,7 +18,7 @@ public abstract class BaseDOController<T extends DO, Q extends Query<T>> extends
     @RequestMapping(SAVE)
     public ResponseData save(@RequestBody T bean) {
         beforeSave(bean);
-        if (service.insert(bean) != 1) {
+        if (!service.insert(bean)) {
             return ResponseData.INSERT_ERROR_RESPONSE;
         }
         afterSave(bean);
@@ -30,7 +30,7 @@ public abstract class BaseDOController<T extends DO, Q extends Query<T>> extends
     public ResponseData update(@RequestBody T bean) {
         beforeUpdate(bean);
         bean.setGmtModified(new Date());
-        if (service.update(bean) != 1) {
+        if (!service.update(bean)) {
             return ResponseData.UPDATE_ERROR_RESPONSE;
         }
         afterUpdate(bean);
@@ -38,22 +38,43 @@ public abstract class BaseDOController<T extends DO, Q extends Query<T>> extends
     }
 
     @Override
-    public void beforeSave(T bean){
+    @RequestMapping(REMOVE)
+    public ResponseData remove(@RequestBody T bean) {
+        beforeRemove(bean);
+        if (!service.delete(bean.getId())) {
+            return ResponseData.DELETE_ERROR_RESPONSE;
+        }
+        afterRemove(bean);
+        return ResponseData.SUCCESS_RESPONSE;
+    }
+
+    @Override
+    public void beforeSave(T bean) {
 
     }
 
     @Override
-    public void afterSave(T bean){
+    public void afterSave(T bean) {
 
     }
 
     @Override
-    public void beforeUpdate(T bean){
+    public void beforeUpdate(T bean) {
 
     }
 
     @Override
-    public void afterUpdate(T bean){
+    public void afterUpdate(T bean) {
+
+    }
+
+    @Override
+    public void beforeRemove(T bean) {
+
+    }
+
+    @Override
+    public void afterRemove(T bean) {
 
     }
 }

@@ -66,6 +66,9 @@ public class SqlProvider {
         sql.INSERT_INTO(getTableName(clazz));
         JSONObject beanObj = JSON.parseObject(JSON.toJSONString(bean));
         for (String key : beanObj.keySet()) {
+            if ("id".equals(key)) {
+                continue;
+            }
             sql.VALUES(String.format("`%s`", conversionName(key)), String.format("#{%s}", key));
         }
         return sql.toString();
@@ -78,6 +81,9 @@ public class SqlProvider {
         SQL sql = new SQL();
         sql.UPDATE(getTableName(clazz));
         for (String key : beanObj.keySet()) {
+            if ("id".equals(key)) {
+                continue;
+            }
             sql.SET(String.format("`%s`=#{%s}", conversionName(key), key));
         }
         sql.WHERE("`id`=#{id}");
@@ -147,11 +153,11 @@ public class SqlProvider {
         return wheres.toArray(new String[]{});
     }
 
-    private JSONObject parseObject(Object o) {
-        if (o == null) {
+    private JSONObject parseObject(Object object) {
+        if (object == null) {
             return new JSONObject();
         }
-        return JSON.parseObject(JSON.toJSONString(o));
+        return JSON.parseObject(JSON.toJSONString(object));
     }
 
     private String conversionName(String name) {

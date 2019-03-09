@@ -17,6 +17,7 @@ public class ResponseData {
     public static final ResponseData SELECT_ERROR_RESPONSE = errorResponse("查询失败");
     public static final ResponseData UPDATE_ERROR_RESPONSE = errorResponse("更新失败");
     public static final ResponseData INSERT_ERROR_RESPONSE = errorResponse("插入失败");
+    public static final ResponseData DELETE_ERROR_RESPONSE = errorResponse("删除失败");
     public static final ResponseData PARAMS_ERROR_RESPONSE = errorResponse("参数错误");
     public static final ResponseData PASSWORD_ERROR_RESPONSE = errorResponse("用户名或密码错误");
     public static final ResponseData CAPTCHA_ERROR_RESPONSE = errorResponse("验证码错误");

@@ -9,8 +9,12 @@ public interface DOController<T extends DO, Q extends Query<T>> extends Controll
 
     ResponseData update(T bean);
 
+    ResponseData remove(T bean);
+
     void beforeSave(T bean);
     void afterSave(T bean);
     void beforeUpdate(T bean);
     void afterUpdate(T bean);
+    void beforeRemove(T bean);
+    void afterRemove(T bean);
 }

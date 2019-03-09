@@ -6,9 +6,9 @@ public interface DOService<T extends DO> extends Service<T> {
 
     T selectById(Long id);
 
-    int insert(T bean);
+    boolean insert(T bean);
 
-    int update(T bean);
+    boolean update(T bean);
 
-    int delete(Long id);
+    boolean delete(Long id);
 }
