@@ -12,28 +12,31 @@ public interface Query<T extends POJO> {
     Column GMT_CREATE_COLUMN = Column.GMT_CREATE;
     Column GMT_MODIFIED_COLUMN = Column.GMT_MODIFIED;
 
+    int DELETED = 1;
+    int NOT_DELETED = 0;
+
     T toBean();
 
-    enum Order{
-        ASC,DESC
+    enum Order {
+        ASC, DESC
     }
 
-    enum Column{
-        RAND("rand()"),ID,GMT_CREATE,GMT_MODIFIED;
+    enum Column {
+        RAND("rand()"), ID, GMT_CREATE, GMT_MODIFIED;
 
         private String value;
 
-        Column(){
+        Column() {
 
         }
 
-        Column(String value){
+        Column(String value) {
             this.value = value;
         }
 
         @Override
         public String toString() {
-            return value==null?super.toString():value;
+            return value == null ? super.toString() : value;
         }
     }
 }
