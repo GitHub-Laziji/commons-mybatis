@@ -16,16 +16,14 @@ import java.util.List;
 
 public class SqlProvider {
 
-    public String select(ProviderContext context, Query query) {
+    public String selectAll(ProviderContext context, Query query) {
         Class clazz = getEntityClass(context);
         assert clazz != null;
-        StringBuilder sql = new StringBuilder();
-        sql.append(new SQL()
+        StringBuilder sql = new StringBuilder(new SQL()
                 .SELECT(getColumns(clazz))
                 .FROM(getTableName(clazz))
                 .WHERE(getWheres(query, clazz))
                 .toString());
-
         JSONObject queryObj = parseObject(query);
         if (queryObj.get("sort") != null) {
             sql.append(" order by ").append(queryObj.getString("sort")).append(" ");
@@ -33,6 +31,12 @@ public class SqlProvider {
                 sql.append(queryObj.getString("order"));
             }
         }
+        return sql.toString();
+    }
+
+    public String select(ProviderContext context, Query query) {
+        StringBuilder sql = new StringBuilder(selectAll(context,query));
+        JSONObject queryObj = parseObject(query);
         if (queryObj.get("offset") != null && queryObj.get("limit") != null) {
             sql.append(" limit #{offset}, #{limit}");
         }

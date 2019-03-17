@@ -11,6 +11,9 @@ public interface Dao<T extends POJO> {
     @SelectProvider(type = SqlProvider.class, method = "select")
     List<T> select(Query<T> query);
 
+    @SelectProvider(type = SqlProvider.class, method = "selectAll")
+    List<T> selectAll(Query<T> query);
+
     @SelectProvider(type = SqlProvider.class, method = "selectCount")
     int selectCount(Query<T> query);
 }

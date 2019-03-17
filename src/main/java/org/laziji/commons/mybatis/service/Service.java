@@ -11,6 +11,8 @@ public interface Service<T extends POJO> {
 
     List<T> selectAll();
 
+    List<T> selectAll(Query<T> query);
+
     int selectCount(Query<T> query);
 
     int selectTotal();

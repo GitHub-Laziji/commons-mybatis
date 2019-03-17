@@ -20,7 +20,12 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
 
     @Override
     public List<T> selectAll() {
-        return select(null);
+        return mapper.selectAll(null);
+    }
+
+    @Override
+    public List<T> selectAll(Query<T> query) {
+        return mapper.selectAll(query);
     }
 
     @Override
@@ -35,17 +40,17 @@ public abstract class BaseService<T extends POJO> implements Service<T> {
 
     @Override
     public T selectOne(Query<T> query) {
-        if (selectCount(query) != 1) {
+        if (mapper.selectCount(query) != 1) {
             return null;
         }
-        List<T> list = select(query);
+        List<T> list = mapper.select(query);
         return list.get(0);
     }
 
     @Override
     public T selectFirstOne(Query<T> query) {
-        List<T> list = select(query);
-        if(list==null||list.size()==0){
+        List<T> list = mapper.select(query);
+        if (list == null || list.size() == 0) {
             return null;
         }
         return list.get(0);
