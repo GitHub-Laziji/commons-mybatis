@@ -3,6 +3,7 @@ package org.laziji.commons.mybatis.controller;
 import com.alibaba.fastjson.JSON;
 
 import java.io.PrintWriter;
+import java.util.Map;
 
 public class ResponseData {
 
@@ -12,15 +13,23 @@ public class ResponseData {
     public static final Status PERMISSION_DENIED_ERROR = Status.PERMISSION_DENIED_ERROR;
     public static final Status SERVER_ERROR = Status.SERVER_ERROR;
 
+    public static final Status SELECT_ERROR = Status.SELECT_ERROR;
+    public static final Status UPDATE_ERROR = Status.UPDATE_ERROR;
+    public static final Status INSERT_ERROR = Status.INSERT_ERROR;
+    public static final Status DELETE_ERROR = Status.DELETE_ERROR;
+    public static final Status PARAMS_ERROR = Status.PARAMS_ERROR;
+    public static final Status PASSWORD_ERROR = Status.PASSWORD_ERROR;
+    public static final Status CAPTCHA_ERROR = Status.CAPTCHA_ERROR;
+
     public static final ResponseData SUCCESS_RESPONSE = successResponse();
     public static final ResponseData ERROR_RESPONSE = errorResponse();
-    public static final ResponseData SELECT_ERROR_RESPONSE = errorResponse("查询失败");
-    public static final ResponseData UPDATE_ERROR_RESPONSE = errorResponse("更新失败");
-    public static final ResponseData INSERT_ERROR_RESPONSE = errorResponse("插入失败");
-    public static final ResponseData DELETE_ERROR_RESPONSE = errorResponse("删除失败");
-    public static final ResponseData PARAMS_ERROR_RESPONSE = errorResponse("参数错误");
-    public static final ResponseData PASSWORD_ERROR_RESPONSE = errorResponse("用户名或密码错误");
-    public static final ResponseData CAPTCHA_ERROR_RESPONSE = errorResponse("验证码错误");
+    public static final ResponseData SELECT_ERROR_RESPONSE = errorResponse(SELECT_ERROR);
+    public static final ResponseData UPDATE_ERROR_RESPONSE = errorResponse(UPDATE_ERROR);
+    public static final ResponseData INSERT_ERROR_RESPONSE = errorResponse(INSERT_ERROR);
+    public static final ResponseData DELETE_ERROR_RESPONSE = errorResponse(DELETE_ERROR);
+    public static final ResponseData PARAMS_ERROR_RESPONSE = errorResponse(PARAMS_ERROR);
+    public static final ResponseData PASSWORD_ERROR_RESPONSE = errorResponse(PASSWORD_ERROR);
+    public static final ResponseData CAPTCHA_ERROR_RESPONSE = errorResponse(CAPTCHA_ERROR);
     public static final ResponseData NOT_LOGGED_ERROR_RESPONSE = errorResponse(NOT_LOGGED_ERROR);
     public static final ResponseData PERMISSION_DENIED_ERROR_RESPONSE = errorResponse(PERMISSION_DENIED_ERROR);
     public static final ResponseData SERVER_ERROR_RESPONSE = errorResponse(SERVER_ERROR);
@@ -111,7 +120,16 @@ public class ResponseData {
         ERROR(500),
         NOT_LOGGED_ERROR(501),
         PERMISSION_DENIED_ERROR(502),
-        SERVER_ERROR(503);
+        SERVER_ERROR(503),
+
+        INSERT_ERROR(510),
+        DELETE_ERROR(511),
+        UPDATE_ERROR(512),
+        SELECT_ERROR(513),
+        PARAMS_ERROR(514),
+        PASSWORD_ERROR(515),
+        CAPTCHA_ERROR(516);
+
         private int code;
 
         Status(int code) {
